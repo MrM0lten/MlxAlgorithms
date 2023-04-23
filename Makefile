@@ -38,7 +38,8 @@ compile: $(TARGET)
 
 # Linker
 $(TARGET): $(OBJ)
-	$(MAKE) -C ./libft
+	@$(MAKE) -C ./libft
+	@$(MAKE) -C ./Mlx_Module_Button
 	@printf "Creating libft: $(GREEN)OK!\n$(DEF_COLOR)"
 	@$(CC) $(CFLAGS) $^ $(E_LIB_DIRS) $(E_LIB_DEPS) -o $@
 	@printf "Linking: $(GREEN)OK!\n$(DEF_COLOR)"
