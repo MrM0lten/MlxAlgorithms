@@ -27,24 +27,34 @@ void clear_canvas(void *param)
     printf("cleared Canvas\n");
 }
 
-int32_t get_pixel_color(mlx_image_t* img,int x,int y)
+uint32_t get_pixel_color(mlx_image_t* img,int x,int y)
 {
+    long int arr_pos = (y *img->width +x) * 4;
+
+    uint32_t color = 0;
+
+    color |= (uint32_t)img->pixels[arr_pos++] << 24;
+    color |= (uint32_t)img->pixels[arr_pos++] << 16;
+    color |= (uint32_t)img->pixels[arr_pos++] << 8;
+    color |= (uint32_t)img->pixels[arr_pos];
+
+    return color;
     //fill me
 }
 
-void flood_fill(mlx_image_t* img,int x, int y, int32_t color)
+void flood_fill(mlx_image_t* img,int x, int y, uint32_t color)
 {
-    if(x <= 0 || x >= DFT_CANV_WIDTH || y <= 0 || y >= HEIGHT)
+    if(x <= 0 + 300 || x >= DFT_CANV_WIDTH-300 || y <= 0 + 300 || y >= HEIGHT -300)
         return;
     if(get_pixel_color(img,x,y) == color)//pixel at that position is already of that color
         return;
-    //printf("%d,%d\n",x,y);
+
     mlx_put_pixel(img,x,y,color);
 
-    flood_fill(img, x -1, y,color);
     flood_fill(img, x , y -1 ,color);
-    flood_fill(img, x +1, y,color);
     flood_fill(img, x , y + 1,color);
+    flood_fill(img, x -1, y,color);
+    flood_fill(img, x +1, y,color);
 
 }
 
@@ -64,7 +74,7 @@ void exec_flood_fill(mouse_key_t button, action_t action, modifier_key_t mods, v
         int x;
         int y;
         mlx_get_mouse_pos(p->mlx,&x,&y);
-        printf("%d,%d\n",x,y);
+        printf("in exec flood fill %d,%d\n",x,y);
         if(mouse_on_canvas(x,y))
         {
             printf("executing flood fill\n");

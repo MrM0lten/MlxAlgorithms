@@ -60,7 +60,7 @@ void create_btn_layout(prog_t* prog);
 void enable_floodfill(void *param);
 void clear_canvas(void *param);
 void exec_flood_fill(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
-void flood_fill(mlx_image_t* image,int x, int y, int32_t color);
+void flood_fill(mlx_image_t* image,int x, int y, uint32_t color);
 
 
 
