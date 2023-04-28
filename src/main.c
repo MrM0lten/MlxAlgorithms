@@ -10,6 +10,7 @@ void end_prog(void *param)
 
 void cleanup(prog_t* prog)
 {
+    free(prog->dbg_menu->flags);
     free(prog->dbg_menu);
     free(prog);
 }

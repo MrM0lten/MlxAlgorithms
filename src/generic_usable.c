@@ -23,3 +23,17 @@ void set_img_color(mlx_image_t* img,int32_t color)
 	    pixelarr[i] = (uint8_t)(color & 0xFF);
     }
 }
+
+void set_text_color(mlx_texture_t* img,int32_t color)
+{
+    uint8_t* pixelarr = img->pixels;
+
+    size_t pxl_size = img->height * img->width * 4;
+    for (size_t i = 0; i < pxl_size; i++)
+    {
+        pixelarr[i++] = (uint8_t)(color >> 24);
+	    pixelarr[i++] = (uint8_t)(color >> 16);
+	    pixelarr[i++] = (uint8_t)(color >> 8);
+	    pixelarr[i] = (uint8_t)(color & 0xFF);
+    }
+}

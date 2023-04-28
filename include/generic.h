@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
 #include "libft.h"
 #include "MLX42.h"
 #include "mlx_button.h"
@@ -21,7 +23,8 @@
 
 typedef struct flag_s
 {
-    int b_ff;
+    bool b_ff;
+    uint32_t ff_col;
 
 } flag_t;
 
@@ -59,13 +62,18 @@ void create_btn_layout(prog_t* prog);
 //debug menu functions
 void enable_floodfill(void *param);
 void clear_canvas(void *param);
-void exec_flood_fill(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
-void flood_fill(mlx_image_t* image,int x, int y, uint32_t color);
+void randomize_ff_col(void *param);
 
+//flood fill
+void exec_flood_fill(mouse_key_t button, action_t action, modifier_key_t mods, void *param);
+void rec_flood_fill(mlx_image_t* image,int x, int y, uint32_t color, uint32_t old_col);
+void lin_flood_fill(mlx_image_t* img,int x, int y, uint32_t new_col, uint32_t old_col);
 
 
 //useful functions outside of this project
 void set_img_color(mlx_image_t* img,int32_t color);
 int get_txt_midX(char *str);
+uint32_t get_pixel_color(mlx_image_t* img,int x,int y);
+void set_text_color(mlx_texture_t* img,int32_t color);
 
 #endif
