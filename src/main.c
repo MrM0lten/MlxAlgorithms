@@ -28,7 +28,7 @@ int main(void)
     mlx_image_to_window(prog->mlx, prog->img, 0, 0);
     setup_debug_menu(prog);
 
-
+    setup_shape(prog);
     mlx_loop_hook(prog->mlx,end_prog,prog);
     mlx_loop(prog->mlx);
     mlx_button_terminate(prog->btn_data);

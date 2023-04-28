@@ -13,13 +13,24 @@ void create_btn_layout(prog_t* prog)
     button_t* ff = mlx_create_button(prog->btn_data,NULL,SQ_BTN_SIZE,SQ_BTN_SIZE);
     mlx_set_btn_text(ff,"FF",TEXT_CENTER);
     btn_bind_on_click(ff,enable_floodfill,prog);
-    mlx_button_to_window(prog->mlx,ff,prog->dbg_menu->posX,50);
+    mlx_button_to_window(prog->mlx,ff,prog->dbg_menu->posX+ 30,50);
 
     btn_textures_t *text = mlx_create_btn_textures_from_colors(30,30,prog->dbg_menu->flags->ff_col,prog->dbg_menu->flags->ff_col,prog->dbg_menu->flags->ff_col);
     button_t* ff_col = mlx_create_button(prog->btn_data,text,SQ_BTN_SIZE,SQ_BTN_SIZE);
     mlx_set_btn_text(ff_col,"RC",TEXT_CENTER);
     btn_bind_on_click(ff_col,randomize_ff_col,prog);
-    mlx_button_to_window(prog->mlx,ff_col,prog->dbg_menu->posX + 30,50);
+    mlx_button_to_window(prog->mlx,ff_col,prog->dbg_menu->posX ,50);
+
+    button_t* noise_gen = mlx_create_button(prog->btn_data,NULL,SQ_BTN_SIZE,SQ_BTN_SIZE);
+    mlx_set_btn_text(noise_gen,"RN",TEXT_CENTER);
+    btn_bind_on_click(noise_gen,generate_noise,prog);
+    mlx_button_to_window(prog->mlx,noise_gen,prog->dbg_menu->posX + 60,50);
+
+    button_t* draw_sq = mlx_create_button(prog->btn_data,NULL,SQ_BTN_SIZE,SQ_BTN_SIZE);
+    mlx_set_btn_text(draw_sq,"DSQ",TEXT_CENTER);
+    btn_bind_on_click(draw_sq,enable_draw_shape,prog);
+    mlx_button_to_window(prog->mlx,draw_sq,prog->dbg_menu->posX,80);
+
 }
 
 void setup_debug_menu(prog_t* prog)
@@ -37,10 +48,15 @@ void setup_debug_menu(prog_t* prog)
     prog->dbg_menu->flags = malloc(sizeof(flag_t));
     prog->dbg_menu->flags->b_ff = false;
     prog->dbg_menu->flags->ff_col = 0x303030FF;
+    prog->dbg_menu->flags->b_draw_shape = false;
+    prog->dbg_menu->flags->shape_scale = 1;
 
 
     create_btn_layout(prog);
     //hooks
     generic_mouse_hook(prog->btn_data,exec_flood_fill,prog);
+    generic_mouse_hook(prog->btn_data,exec_draw_shape,prog);
+    mlx_scroll_hook(prog->mlx, mouse_scroll,prog);
+
 }
 

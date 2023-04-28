@@ -43,7 +43,7 @@ uint32_t get_pixel_color(mlx_image_t* img,int x,int y)
 }
 
 
-int mouse_on_canvas(int x, int y)
+int pos_on_canvas(int x, int y)
 {
     if(x <= 0 || x >= DFT_CANV_WIDTH || y <= 0 || y >= HEIGHT)
         return 0;
@@ -60,7 +60,7 @@ void exec_flood_fill(mouse_key_t button, action_t action, modifier_key_t mods, v
         int y;
         mlx_get_mouse_pos(p->mlx,&x,&y);
         printf("in exec flood fill %d,%d\n",x,y);
-        if(mouse_on_canvas(x,y) && get_pixel_color(p->img,x,y) != flags->ff_col)
+        if(pos_on_canvas(x,y) && get_pixel_color(p->img,x,y) != flags->ff_col)
         {
             printf("executing flood fill\n");
             lin_flood_fill(p->img,x,y,flags->ff_col,get_pixel_color(p->img,x,y));
@@ -69,6 +69,45 @@ void exec_flood_fill(mouse_key_t button, action_t action, modifier_key_t mods, v
     }
 
 }
+
+void exec_draw_shape(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
+{
+    prog_t* p = param;
+    flag_t* flags = p->dbg_menu->flags;
+    if(button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && flags->b_draw_shape)
+    {
+        int x;
+        int y;
+        mlx_get_mouse_pos(p->mlx,&x,&y);
+        printf("in exec draw_shape %d,%d\n",x,y);
+        if(pos_on_canvas(x,y))
+        {
+            printf("executing draw_shape\n");
+            draw_shape(p->img,p->shapes[1],x,y,p->dbg_menu->flags->shape_scale);
+            //get pixel pos
+            //get shape in form of array
+            //insert shape into img array
+        }
+
+    }
+
+}
+
+void mouse_scroll(double xdelta, double ydelta, void* param)
+{
+    prog_t* p = param;
+
+    if(p->dbg_menu->flags->b_draw_shape)
+    {
+        if(ydelta > 0)
+            p->dbg_menu->flags->shape_scale *= 1.1;
+        else
+            p->dbg_menu->flags->shape_scale *= 0.9;
+        printf("scale = %lf\n",p->dbg_menu->flags->shape_scale);
+
+    }
+}
+
 
 void randomize_ff_col(void *param)
 {
@@ -88,6 +127,8 @@ void randomize_ff_col(void *param)
     col |= 255; //setting the alpha to always be 255
 
     t_btn_list* lst = (t_btn_list*)p->btn_data->buttons;
+    lst = lst->next;
+    lst = lst->next;
     printf("1\n");
     printf("1\n");
     printf("1\n");
@@ -103,4 +144,40 @@ void randomize_ff_col(void *param)
     printf("1\n");
     flags->ff_col = col;
     printf("New Color = %d\n", col);
+}
+
+void generate_noise(void *param)
+{
+    prog_t* p = param;
+    srand(time(NULL));
+    int amount = rand() % 100000;
+
+    for (int i = 0; i < amount; i++)
+    {
+        int x = rand() % 1200;
+        int y = rand() % 800;
+        mlx_put_pixel(p->img,x,y,0x000000FF);
+    }
+
+}
+
+void enable_draw_shape(void *param)
+{
+    prog_t* p = param;
+
+    if(p->dbg_menu->flags->b_draw_shape == true)
+    {
+        printf("disabled draw_shape\n");
+        mlx_set_cursor(p->mlx,NULL);
+        p->dbg_menu->flags->b_draw_shape = 0;
+        p->dbg_menu->flags->shape_scale = 1;
+    }
+    else
+    {
+        printf("enabled draw_shape\n");
+        mlx_set_cursor(p->mlx,mlx_create_std_cursor(MLX_CURSOR_HAND));
+        p->dbg_menu->flags->b_draw_shape = 1;
+    }
+
+
 }

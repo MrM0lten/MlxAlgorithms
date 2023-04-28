@@ -21,8 +21,8 @@ void lin_flood_fill(mlx_image_t* img,int x, int y, uint32_t new_col, uint32_t ol
 {
     bool **visited = (bool **)malloc(img->width * sizeof(bool *));
     for (int i = 0; i < img->width; i++) {
-    visited[i] = (bool *)malloc(img->height * sizeof(bool));
-    memset(visited[i], false, img->height * sizeof(bool));
+        visited[i] = (bool *)malloc(img->height * sizeof(bool));
+        memset(visited[i], false, img->height * sizeof(bool));
     }
     int stack_size = 0;
     int max_stack_size = img->width * img->height;
